@@ -4,7 +4,14 @@ import { isString, isNil } from 'lodash'
 
 export const routeList = {
   home: 'home',
-  'log-in': 'log-in'
+  'log-in': 'log-in',
+  member: 'member',
+  member_list: 'member_list',
+  member_detail: 'member_detail',
+  member_detail_information: 'member_detail_information',
+  'member_detail_deposit-and-withdrawal':
+    'member_detail_deposit-and-withdrawal',
+  member_detail_transaction: 'member_detail_transaction'
 }
 
 const routes: Array<RouteRecordRaw> = [
@@ -26,6 +33,57 @@ const routes: Array<RouteRecordRaw> = [
       layout: 'LayoutNormal',
       isVerifyIdentity: false
     }
+  },
+  {
+    path: '/member',
+    name: routeList.member,
+    component: () => import('../views/member/index.vue'),
+    meta: {
+      layout: 'LayoutDefault',
+      isVerifyIdentity: false
+    },
+    redirect: () => {
+      return {
+        name: routeList.member_list
+      }
+    },
+    children: [
+      {
+        path: 'list',
+        name: routeList.member_list,
+        component: () => import('../views/member/list/index.vue')
+      },
+      {
+        path: 'detail/:member_id',
+        name: routeList.member_detail,
+        component: () => import('../views/member/detail/index.vue'),
+        redirect: () => {
+          return {
+            name: routeList.member_detail_information
+          }
+        },
+        children: [
+          {
+            path: 'information',
+            name: routeList.member_detail_information,
+            component: () =>
+              import('../views/member/detail/information/index.vue')
+          },
+          {
+            path: 'deposit-and-withdrawal',
+            name: routeList['member_detail_deposit-and-withdrawal'],
+            component: () =>
+              import('../views/member/detail/deposit-and-withdrawal/index.vue')
+          },
+          {
+            path: 'transaction',
+            name: routeList.member_detail_transaction,
+            component: () =>
+              import('../views/member/detail/transaction/index.vue')
+          }
+        ]
+      }
+    ]
   }
 ]
 

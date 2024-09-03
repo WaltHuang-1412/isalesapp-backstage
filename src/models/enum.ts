@@ -46,6 +46,12 @@ export enum NumberTransfer {
   十六 = 16
 }
 
+export enum OrderStatus {}
+
+export enum RepairStatus {}
+
+export enum UserStatus {}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function EnumToArray(o: any): IEnumToArray[] {
   return Object.entries(o)
