@@ -1,5 +1,5 @@
 <style lang="scss">
-.member {
+.customer {
   width: 100%;
   height: 100%;
 }

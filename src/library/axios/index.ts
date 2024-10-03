@@ -5,8 +5,8 @@ import { ElMessage, ElNotification } from 'element-plus'
 import { isString, isObject } from 'lodash'
 const axiosInstance = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL
-    ? `${process.env.VUE_APP_BASE_URL}/api/`
-    : '/api/',
+    ? `${process.env.VUE_APP_BASE_URL}/api/v1`
+    : '/api/v1',
   timeout: 10000
 })
 // Add a request interceptor
@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use(
   function (config: any) {
     // Do something before request is sent
     // console.log('request config :>> ', config)
-    const token = localStorage.getItem('access')
+    const token = localStorage.getItem('token')
     if (isString(token) && isObject(config.headers)) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     const { status, statusText } = response
-    // console.log('response :>> ', response)
+    console.log('response :>> ', response)
     switch (status) {
       case HttpsStatusCode.SuccessCreated:
         ElNotification({

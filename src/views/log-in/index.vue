@@ -51,7 +51,7 @@
             <el-input v-model="form.account" />
           </el-form-item>
           <el-form-item label="密碼">
-            <el-input v-model="form.password" />
+            <el-input v-model="form.pwd" type="password" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="handleLogin">登入</el-button>
@@ -63,8 +63,8 @@
 </template>
 <script lang="ts">
 import { defineComponent, reactive, onBeforeMount } from 'vue'
-import { postAuthLoginApi } from '@/utils/api/auth'
-import { IPostAuthLoginRequest } from '@/types/api/auth'
+import { postAccountLoginApi } from '@/utils/api/account'
+import { IPostAccountLoginRequest } from '@/types/api/account'
 import { routeList } from '@/router'
 import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
@@ -73,16 +73,17 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const router = useRouter()
-    const form = reactive<IPostAuthLoginRequest>({
-      account: 'admin',
-      password: 'admin',
-      google_captcha_token: 'ok'
+    const form = reactive<IPostAccountLoginRequest>({
+      account: 'user1',
+      pwd: '000000'
     })
     const handleLogin = async () => {
       try {
-        const { access, refresh } = await postAuthLoginApi(form)
-        localStorage.setItem('access', access)
-        localStorage.setItem('refresh', refresh)
+        const {
+          data: { token }
+        } = await postAccountLoginApi(form)
+        localStorage.setItem('token', token)
+        // localStorage.setItem('refresh', refresh)
         router.push({ name: routeList.home })
       } catch (error) {
         console.log('error :>> ', error)

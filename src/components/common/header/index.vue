@@ -27,8 +27,8 @@ export default defineComponent({
     const router = useRouter()
     const profile = computed(() => store.state.userProfile)
     const handleLogOut = () => {
-      localStorage.removeItem('access')
-      localStorage.removeItem('refresh')
+      localStorage.removeItem('token')
+      // localStorage.removeItem('refresh')
       router.push({ name: routeList['log-in'] })
     }
     return { profile, handleLogOut }

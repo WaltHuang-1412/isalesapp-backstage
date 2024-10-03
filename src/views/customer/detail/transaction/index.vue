@@ -1,5 +1,5 @@
 <style lang="scss">
-.member-deposit-withdrawal {
+.customer-deposit-withdrawal {
   width: 100%;
   height: 100%;
 
@@ -114,7 +114,7 @@ export default defineComponent({
     const initialization = async () => {
       await getTableData()
     }
-    initialization()
+    // initialization()
     return {
       memberId,
       tableData,

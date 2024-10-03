@@ -1,5 +1,5 @@
 <style lang="scss">
-.member-list {
+.customer-list {
   width: 100%;
   height: 100%;
   padding: 20px;
@@ -30,22 +30,22 @@
 }
 </style>
 <template>
-  <div class="member-list">
-    <div class="member-list__title">會員清單</div>
-    <div class="member-list__filter">
-      <div class="member-list__filter__item">
+  <div class="customer-list">
+    <div class="customer-list__title">會員清單</div>
+    <div class="customer-list__filter">
+      <div class="customer-list__filter__item">
         <el-input v-model="filter.search" />
       </div>
-      <div class="member-list__filter__item">
+      <div class="customer-list__filter__item">
         <el-button @click="handleSearch">搜尋</el-button>
       </div>
     </div>
-    <div class="member-list__content">
+    <div class="customer-list__content">
       <template v-if="isArray(tableData)">
         <el-table
           :data="tableData"
           stripe
-          style="width: 100%; height: 100%;"
+          style="width: 100%; height: 100%"
           @row-click="handleRowClick"
         >
           <el-table-column prop="account" label="帳號" />
@@ -54,7 +54,7 @@
         </el-table>
       </template>
     </div>
-    <div class="member-list__pagination">
+    <div class="customer-list__pagination">
       <template v-if="isNumber(pagination.total)">
         <el-pagination
           background
@@ -115,9 +115,9 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleRowClick = (row: any) => {
       router.push({
-        name: routeList.member_detail,
+        name: routeList.customer_detail,
         params: {
-          member_id: row.member_id
+          member_id: row.customer_id
         }
       })
     }
@@ -127,7 +127,7 @@ export default defineComponent({
       }
       await handleSearch()
     }
-    initialization()
+    // initialization()
     return {
       tableData,
       filter,

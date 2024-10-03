@@ -1,5 +1,5 @@
 <style lang="scss">
-.member-information {
+.customer-information {
   width: 100%;
   height: 100%;
 
@@ -127,7 +127,7 @@ export default defineComponent({
     const initialization = async () => {
       await getMemberInformation()
     }
-    initialization()
+    // initialization()
     return {
       memberId,
       formWithReactive,

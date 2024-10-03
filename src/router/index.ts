@@ -5,13 +5,13 @@ import { isString, isNil } from 'lodash'
 export const routeList = {
   home: 'home',
   'log-in': 'log-in',
-  member: 'member',
-  member_list: 'member_list',
-  member_detail: 'member_detail',
-  member_detail_information: 'member_detail_information',
-  'member_detail_deposit-and-withdrawal':
-    'member_detail_deposit-and-withdrawal',
-  member_detail_transaction: 'member_detail_transaction'
+  customer: 'customer',
+  customer_list: 'customer_list',
+  customer_detail: 'customer_detail',
+  customer_detail_information: 'customer_detail_information',
+  'customer_detail_deposit-and-withdrawal':
+    'customer_detail_deposit-and-withdrawal',
+  customer_detail_transaction: 'customer_detail_transaction'
 }
 
 const routes: Array<RouteRecordRaw> = [
@@ -35,51 +35,53 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/member',
-    name: routeList.member,
-    component: () => import('../views/member/index.vue'),
+    path: '/customer',
+    name: routeList.customer,
+    component: () => import('../views/customer/index.vue'),
     meta: {
       layout: 'LayoutDefault',
       isVerifyIdentity: false
     },
     redirect: () => {
       return {
-        name: routeList.member_list
+        name: routeList.customer_list
       }
     },
     children: [
       {
         path: 'list',
-        name: routeList.member_list,
-        component: () => import('../views/member/list/index.vue')
+        name: routeList.customer_list,
+        component: () => import('../views/customer/list/index.vue')
       },
       {
-        path: 'detail/:member_id',
-        name: routeList.member_detail,
-        component: () => import('../views/member/detail/index.vue'),
+        path: 'detail/:customer_id',
+        name: routeList.customer_detail,
+        component: () => import('../views/customer/detail/index.vue'),
         redirect: () => {
           return {
-            name: routeList.member_detail_information
+            name: routeList.customer_detail_information
           }
         },
         children: [
           {
             path: 'information',
-            name: routeList.member_detail_information,
+            name: routeList.customer_detail_information,
             component: () =>
-              import('../views/member/detail/information/index.vue')
+              import('../views/customer/detail/information/index.vue')
           },
           {
             path: 'deposit-and-withdrawal',
-            name: routeList['member_detail_deposit-and-withdrawal'],
+            name: routeList['customer_detail_deposit-and-withdrawal'],
             component: () =>
-              import('../views/member/detail/deposit-and-withdrawal/index.vue')
+              import(
+                '../views/customer/detail/deposit-and-withdrawal/index.vue'
+              )
           },
           {
             path: 'transaction',
-            name: routeList.member_detail_transaction,
+            name: routeList.customer_detail_transaction,
             component: () =>
-              import('../views/member/detail/transaction/index.vue')
+              import('../views/customer/detail/transaction/index.vue')
           }
         ]
       }

@@ -39,7 +39,7 @@ export default defineComponent({
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const initialization = () => {
-      setTimer()
+      // setTimer()
     }
     initialization()
     return {

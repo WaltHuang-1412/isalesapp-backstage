@@ -11,8 +11,8 @@ module.exports = defineConfig({
   },
   devServer: {
     proxy: {
-      '^/api': {
-        target: 'https://ub3d.sit.core-code.tech'
+      '^/api/v1': {
+        target: 'http://54.255.251.215:8080/iSaleApp/'
       }
     }
   },

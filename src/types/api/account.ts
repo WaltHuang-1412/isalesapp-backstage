@@ -2,9 +2,9 @@
 
 export interface IPostAccountLoginRequest {
   account: string | undefined | null
-  password: string | undefined | null
+  pwd: string | undefined | null
 }
 
 export interface IPostAccountLoginResponse {
-  data: any
+  token: any
 }

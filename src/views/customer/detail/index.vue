@@ -1,5 +1,5 @@
 <style lang="scss">
-.member-detail {
+.customer-detail {
   width: 100%;
   height: 100%;
   padding: 10px;
@@ -22,16 +22,16 @@
       @tab-click="handleClick"
     >
       <el-tab-pane
-        label="會員資料"
-        :name="routeList.member_detail_information"
+        label="詳細資訊"
+        :name="routeList.customer_detail_information"
       ></el-tab-pane>
       <el-tab-pane
-        label="存提查詢"
+        label="訂單"
         :name="routeList['member_detail_deposit-and-withdrawal']"
       ></el-tab-pane>
       <el-tab-pane
-        label="交易查詢"
-        :name="routeList.member_detail_transaction"
+        label="維修紀錄"
+        :name="routeList.customer_detail_transaction"
       ></el-tab-pane>
       <transition>
         <router-view></router-view>

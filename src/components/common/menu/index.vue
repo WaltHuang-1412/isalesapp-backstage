@@ -7,7 +7,7 @@
 </style>
 <template>
   <el-menu
-    :default-active="routeList.member"
+    :default-active="routeList.customer"
     @select="handleSelect"
     class="the-menu"
   >
@@ -29,7 +29,7 @@
         <el-menu-item index="1-4-1">item one</el-menu-item>
       </el-sub-menu>
     </el-sub-menu> -->
-    <el-menu-item :index="routeList.member">
+    <el-menu-item :index="routeList.customer">
       <el-icon><icon-menu /></el-icon>
       <template #title>會員管理</template>
     </el-menu-item>
@@ -37,42 +37,6 @@
       <template #title><span>賽事相關設定</span></template>
       
     </el-sub-menu> -->
-    <el-menu-item :index="routeList['pigeon-player']">
-      <el-icon><setting /></el-icon>
-      <template #title>選手名單管理</template>
-    </el-menu-item>
-    <el-menu-item :index="routeList['pigeon-game']">
-      <el-icon><document /></el-icon>
-      <template #title>活動賽事管理</template>
-    </el-menu-item>
-    <el-menu-item :index="routeList['pigeon-management']">
-      <el-icon><document /></el-icon>
-      <template #title>玩法開放 賠率設定</template>
-    </el-menu-item>
-    <el-menu-item :index="routeList.report">
-      <el-icon><document /></el-icon>
-      <template #title>活動賽事報表</template>
-    </el-menu-item>
-    <el-menu-item :index="routeList['preview']">
-      <el-icon><document /></el-icon>
-      <template #title>活動賽事預告</template>
-    </el-menu-item>
-    <el-menu-item :index="routeList.banner">
-      <el-icon><document /></el-icon>
-      <template #title>廣告版位管理</template>
-    </el-menu-item>
-    <el-menu-item :index="routeList['third-party-site']">
-      <el-icon><document /></el-icon>
-      <template #title>第三方平台</template>
-    </el-menu-item>
-    <el-menu-item :index="routeList.user">
-      <el-icon><document /></el-icon>
-      <template #title>權限管理</template>
-    </el-menu-item>
-    <el-menu-item :index="routeList['text-marquee']">
-      <el-icon><document /></el-icon>
-      <template #title>文字跑馬燈</template>
-    </el-menu-item>
   </el-menu>
 </template>
 
@@ -82,7 +46,7 @@ import { Document, Menu as IconMenu, Setting } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { routeList } from '@/router'
 export default defineComponent({
-  components: { Document, IconMenu, Setting },
+  components: { IconMenu },
   name: 'CommonMenu',
   setup() {
     const router = useRouter()
