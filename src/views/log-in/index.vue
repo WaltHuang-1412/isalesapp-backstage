@@ -80,11 +80,16 @@ export default defineComponent({
     const handleLogin = async () => {
       try {
         const {
+          code,
           data: { token }
         } = await postAccountLoginApi(form)
-        localStorage.setItem('token', token)
+        if (code === 'S001') {
+          localStorage.setItem('token', token)
+          router.push({ name: routeList.home })
+        }
+
         // localStorage.setItem('refresh', refresh)
-        router.push({ name: routeList.home })
+        
       } catch (error) {
         console.log('error :>> ', error)
       }

@@ -34,7 +34,7 @@
     <div class="customer-list__title">會員清單</div>
     <div class="customer-list__filter">
       <div class="customer-list__filter__item">
-        <el-input v-model="filter.search" />
+        <el-input v-model="filter.savlue" />
       </div>
       <div class="customer-list__filter__item">
         <el-button @click="handleSearch">搜尋</el-button>
@@ -42,15 +42,23 @@
     </div>
     <div class="customer-list__content">
       <template v-if="isArray(tableData)">
-        <el-table
-          :data="tableData"
-          stripe
-          style="width: 100%; height: 100%"
-          @row-click="handleRowClick"
-        >
-          <el-table-column prop="account" label="帳號" />
-          <el-table-column prop="name" label="名字" />
-          <el-table-column prop="dealer_code" label="經銷商" />
+        <el-table :data="tableData" stripe style="width: 100%; height: 100%">
+          <el-table-column prop="name" label="客戶姓名" />
+          <el-table-column prop="cellphoneNum" label="手機號碼" />
+          <el-table-column prop="telephoneNum" label="電話" />
+          <el-table-column prop="addressDetail" label="聯絡地址" />
+          <el-table-column prop="note" label="備註" />
+          <el-table-column fixed="right" label="操作" width="120">
+            <template #default="scope">
+              <el-button
+                link
+                type="primary"
+                size="small"
+                @click="handleDetail(scope)"
+                >詳細資訊</el-button
+              >
+            </template>
+          </el-table-column>
         </el-table>
       </template>
     </div>
@@ -71,31 +79,28 @@
 <script lang="ts">
 import { cloneDeep, isArray, isNumber } from 'lodash'
 import { defineComponent, reactive, ref, Ref } from 'vue'
-import {
-  IGetMembersRequest,
-  IGetMembersResponse,
-  IMember
-} from '@/types/api/member'
-import { getMembersApi } from '@/utils/api/member'
+import { IPostCustomerListRequest, ICustomerItem } from '@/types/api/account'
+import { getCustomerListApi } from '@/utils/api/account'
 import { IPagination } from '@/types/api/global'
 import { routeList } from '@/router'
 import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
-import { accountType } from '@/models/enum'
 export default defineComponent({
   name: 'MemberList',
   setup() {
     const store = useStore()
     const router = useRouter()
-    const tableData: Ref<IMember[] | null> = ref(null)
-    const filter = reactive<IGetMembersRequest>({
-      search: null,
-      dealer_code: null,
-      account_status: true,
-      sorting: null,
-      descending: true,
-      page: 1,
-      size: 15
+    const tableData: Ref<ICustomerItem[] | null> = ref(null)
+    const filter = reactive<IPostCustomerListRequest>({
+      // search: null,
+      // dealer_code: null,
+      // account_status: true,
+      // sorting: null,
+      // descending: true,
+      stype: null,
+      savlue: null,
+      page: 1
+      // size: 15
     })
     const pagination = reactive<IPagination>({
       total: null
@@ -108,35 +113,38 @@ export default defineComponent({
       await getTableData()
     }
     const getTableData = async () => {
-      const { items, total }: IGetMembersResponse = await getMembersApi(filter)
-      tableData.value = items
-      pagination.total = total
+      const {
+        data: { list }
+      } = await getCustomerListApi(filter)
+      console.log('data :>> ', list)
+      tableData.value = list
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleRowClick = (row: any) => {
+    const handleDetail = ({ row }: { row: any }) => {
+      console.log('row :>> ', row)
       router.push({
         name: routeList.customer_detail,
         params: {
-          member_id: row.customer_id
+          customer_id: row.id
         }
       })
     }
     const initialization = async () => {
-      if (store.state.userProfile?.account_type === accountType.dealer) {
-        filter.dealer_code = cloneDeep(store.state.userProfile?.user_code)
-      }
+      // if (store.state.userProfile?.account_type === accountType.dealer) {
+      // filter.dealer_code = cloneDeep(store.state.userProfile?.user_code)
+      // }
       await handleSearch()
     }
-    // initialization()
+    initialization()
     return {
       tableData,
       filter,
       pagination,
       isArray,
       isNumber,
-      handleRowClick,
       handleSearch,
-      handleCurrentChange
+      handleCurrentChange,
+      handleDetail
     }
   }
 })
