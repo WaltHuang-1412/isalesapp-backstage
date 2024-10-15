@@ -33,7 +33,6 @@ axiosInstance.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     const { status, statusText } = response
-    console.log('response :>> ', response)
     switch (status) {
       case HttpsStatusCode.SuccessCreated:
         ElNotification({

@@ -31,7 +31,7 @@
 </style>
 <template>
   <div class="customer-list">
-    <div class="customer-list__title">會員清單</div>
+    <div class="customer-list__title">客戶清單</div>
     <div class="customer-list__filter">
       <div class="customer-list__filter__item">
         <el-input v-model="filter.savlue" />
@@ -114,14 +114,14 @@ export default defineComponent({
     }
     const getTableData = async () => {
       const {
-        data: { list }
+        data: { list },
+        dataPage: { total }
       } = await getCustomerListApi(filter)
-      console.log('data :>> ', list)
       tableData.value = list
+      pagination.total = total
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleDetail = ({ row }: { row: any }) => {
-      console.log('row :>> ', row)
       router.push({
         name: routeList.customer_detail,
         params: {

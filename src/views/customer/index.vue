@@ -5,7 +5,7 @@
 }
 </style>
 <template>
-  <div class="member">
+  <div class="customer">
     <transition>
       <router-view></router-view>
     </transition>
@@ -14,7 +14,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
-  name: 'Member',
+  name: 'Customer',
   setup() {
     return {}
   }
