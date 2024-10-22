@@ -1,0 +1,91 @@
+<html>
+
+<head>
+  <title>Sample</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+  <center>
+    <!-- purchAmt, lidm, merID ,AutoCap,txType 等參數值 由特店填入 value -->
+    <form method=post action=https://eposnt.hncb.com.tw/transaction/api-auth/>
+      <table width=540 bgcolor=#999999>
+        <TR bgColor=#ffffff>
+          <TD class=c-13 bgColor=#aedcff><STRONG>訂購物品範例_A sample of shopping
+              goods</STRONG></TD>
+        </TR>
+        <TR bgColor=#ffffff>
+          <TD width="100%">網路特店編號(Mer ID): <INPUT value=21432 name=merID></TD>
+        </TR>
+        <TR bgColor=#ffffff>
+          <TD width="100%">網路特店名稱(Merchant Name):
+            <INPUT value="忠欣股份有限公司" name=MerchantName>
+          </TD>
+        </TR>
+        <TR bgColor=#ffffff>
+          <TD width="100%">銀行授權 Merchant ID:<INPUT value=797944808041403 name=MerchantID>
+          </TD>
+        </TR>
+        <TR bgColor=#ffffff>
+          <TD width="100%">銀行授權 Terminal ID:<INPUT value=93880438 name=TerminalID>
+          </TD>
+        </TR>
+        <TR bgColor=#ffffff>
+          <TD width="100%">授權結果接收程式:<INPUT maxLength=100 size=50 name=AuthResURL> </TD>
+        </TR>
+        <TR bgColor=#ffffff>
+          <TD width="100%">訂單編號(Order Number):<INPUT value="Order20240206153719" name=lidm>
+          </TD>
+        </TR>
+        <TR bgColor=#ffffff>
+          <TD vAlign=top width="15%">付款方式</TD>
+          <TBODY>
+            <TR bgColor=#ffffff>
+              <TD width="100%" colSpan=2><INPUT onclick=chkTxType(); type=radio CHECKED value=0 name=txType>一般付款交易 </TD>
+            </TR>
+            <TR bgColor=#ffffff>
+              <TD width="100%" colSpan=2><INPUT onclick=chkTxType(); type=radio CHECKED value=1 name=txType>分期付款交易 </TD>
+            </TR>
+            <TR bgColor=#ffffff>
+              <TD width="100%" colSpan=2><INPUT onclick=chkTxType(); type=hidden name="encode" value="UTF-8">一般付款交易
+              </TD>
+            </TR>
+
+
+
+            <TR bgColor=#ffffff>
+              <TD width="100%">是否轉入請款檔(若特店 EDC 預設為否) <INPUT type=radio CHECKED value=1 name=AutoCap>是:Yes <INPUT
+                  type=radio value=0 name=AutoCap>否:No
+              </TD>
+            </TR>
+            <TR bgColor=#ffffff>
+              <TD width="100%">
+                <TABLE width="100%" border=0>
+                  <TBODY>
+                    <TR>
+                      <TD class=c-13><STRONG>品名(Item)</STRONG></TD>
+                      <TD class=c-13 align=right><STRONG>數量(Quantity)</STRONG></TD>
+                      <TD class=c-13 align=right><STRONG>價格(Purchase Amount)</STRONG></TD>
+                    </TR>
+                    <TR>
+                      <TD class=c-13>HyShop Software</TD>
+                      <TD class=c-13 align=right>1</TD>
+                      <TD class=c-13 align=right>NT.<INPUT size=3 value="4000" name=purchAmt></TD>
+                    </TR>
+                  </TBODY>
+                </TABLE>
+              </TD>
+            </TR>
+            <TR bgColor=#aedcff>
+              <TD align=middle>
+                <INPUT TYPE=HIDDEN NAME=checkValue value="b206e91c-eedb-46">
+                <INPUT onclick=doSubmit(); type=submit value="Pay by credit card" border=0 name=imageField height="32"
+                  width="161">
+              </TD>
+            </TR>
+        </tr>
+      </table>
+    </form>
+  </center>
+</body>
+
+</html>

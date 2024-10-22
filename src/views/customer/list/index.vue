@@ -15,7 +15,6 @@
 
     &__item {
       display: inline-block;
-      width: 200px;
       margin-right: 10px;
     }
   }
@@ -34,7 +33,12 @@
     <div class="customer-list__title">客戶清單</div>
     <div class="customer-list__filter">
       <div class="customer-list__filter__item">
-        <el-input v-model="filter.savlue" />
+        <el-button type="primary" :icon="Plus" @click="handleCreate"
+          >新增客戶</el-button
+        >
+      </div>
+      <div class="customer-list__filter__item">
+        <el-input v-model="filter.savlue" :prefix-icon="Search"> </el-input>
       </div>
       <div class="customer-list__filter__item">
         <el-button @click="handleSearch">搜尋</el-button>
@@ -74,6 +78,11 @@
         />
       </template>
     </div>
+    <member-edit
+      :customer-id="selectedCustomerId"
+      @success="handleSearch"
+      @close="handleDefaultSelectedCustomerId"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -85,11 +94,18 @@ import { IPagination } from '@/types/api/global'
 import { routeList } from '@/router'
 import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
+import MemberEdit from '@/components/project/member/Edit.vue'
+import { Plus, Search } from '@element-plus/icons-vue'
 export default defineComponent({
   name: 'MemberList',
+  components: {
+    MemberEdit
+  },
   setup() {
     const store = useStore()
     const router = useRouter()
+    const isDisabled = ref(true)
+    const selectedCustomerId: Ref<number | null | undefined> = ref(null)
     const tableData: Ref<ICustomerItem[] | null> = ref(null)
     const filter = reactive<IPostCustomerListRequest>({
       // search: null,
@@ -129,6 +145,13 @@ export default defineComponent({
         }
       })
     }
+    const handleCreate = () => {
+      isDisabled.value = false
+      selectedCustomerId.value = -1
+    }
+    const handleDefaultSelectedCustomerId = () => {
+      selectedCustomerId.value = null
+    }
     const initialization = async () => {
       // if (store.state.userProfile?.account_type === accountType.dealer) {
       // filter.dealer_code = cloneDeep(store.state.userProfile?.user_code)
@@ -137,14 +160,19 @@ export default defineComponent({
     }
     initialization()
     return {
+      Plus,
+      Search,
       tableData,
       filter,
       pagination,
       isArray,
       isNumber,
+      selectedCustomerId,
       handleSearch,
       handleCurrentChange,
-      handleDetail
+      handleDetail,
+      handleCreate,
+      handleDefaultSelectedCustomerId
     }
   }
 })

@@ -14,7 +14,7 @@
 }
 </style>
 <template>
-  <div class="member-detail">
+  <div class="customer-detail">
     <el-tabs
       v-model="activeName"
       type="border-card"
