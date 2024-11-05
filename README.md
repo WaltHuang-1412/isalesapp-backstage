@@ -20,5 +20,8 @@ yarn build
 yarn lint
 ```
 
+
+aws s3 sync dist/ s3://isalesapp --delete
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

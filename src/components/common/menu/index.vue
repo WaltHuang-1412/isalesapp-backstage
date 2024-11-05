@@ -33,6 +33,10 @@
       <el-icon><icon-menu /></el-icon>
       <template #title>會員管理</template>
     </el-menu-item>
+    <el-menu-item :index="routeList.order">
+      <el-icon><icon-menu /></el-icon>
+      <template #title>訂單</template>
+    </el-menu-item>
     <!-- <el-sub-menu :index="routeList.pigeon">
       <template #title><span>賽事相關設定</span></template>
       

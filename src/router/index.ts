@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { store } from '@/store'
 import { isString, isNil } from 'lodash'
 
@@ -11,7 +11,10 @@ export const routeList = {
   customer_detail_information: 'customer_detail_information',
   'customer_detail_deposit-and-withdrawal':
     'customer_detail_deposit-and-withdrawal',
-  customer_detail_transaction: 'customer_detail_transaction'
+  customer_detail_transaction: 'customer_detail_transaction',
+  order: 'order',
+  order_list: 'order_list',
+  'order_product-list': 'order_product-list'
 }
 
 const routes: Array<RouteRecordRaw> = [
@@ -86,11 +89,42 @@ const routes: Array<RouteRecordRaw> = [
         ]
       }
     ]
+  },
+  {
+    path: '/order',
+    name: routeList.order,
+    component: () => import('../views/order/index.vue'),
+    meta: {
+      layout: 'LayoutDefault',
+      isVerifyIdentity: false
+    },
+    redirect: () => {
+      return {
+        name: routeList.order_list
+      }
+    },
+    children: [
+      {
+        path: 'list',
+        name: routeList.order_list,
+        component: () => import('../views/order/list/index.vue')
+      },
+      {
+        path: 'product-list/:order_id',
+        name: routeList['order_product-list'],
+        component: () => import('../views/order/product-list/index.vue')
+      }
+    ]
   }
 ]
 
+// const router = createRouter({
+//   history: createWebHistory(process.env.BASE_URL),
+//   routes
+// })
+
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(),
   routes
 })
 
