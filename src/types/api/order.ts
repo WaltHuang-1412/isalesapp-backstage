@@ -15,7 +15,7 @@ export interface IOrderItem {
   custOrderNo: string | null
   customerId: number | null
   customerName: string | null
-  orderStatus: string | null
+  orderStatus: number | string | null
   note: string | null
   totalPrice: number | null
   updateTime: string | null
@@ -23,7 +23,7 @@ export interface IOrderItem {
 }
 
 export interface IGetOrderItemResponse {
-  Order: IOrderItem
+  order: IOrderItem
 }
 
 export enum OrderStatus {

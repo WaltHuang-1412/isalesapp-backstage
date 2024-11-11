@@ -62,6 +62,13 @@
                 @click="handleDetail(scope)"
                 >詳細資訊</el-button
               >
+              <el-button
+                link
+                type="primary"
+                size="small"
+                @click="handleEdit(scope)"
+                >編輯</el-button
+              >
             </template>
           </el-table-column>
         </el-table>

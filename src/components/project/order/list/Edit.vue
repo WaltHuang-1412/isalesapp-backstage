@@ -11,14 +11,30 @@
     </template>
     <template #default>
       <el-form label-position="top">
-        <el-form-item label="姓名">
+        <el-form-item label="訂單編號">
           <el-input v-model="form.custOrderNo" :disabled="isDisabled" />
         </el-form-item>
-        <el-form-item label="稱謂">
-          <el-input v-model="form.orderStatus" :disabled="isDisabled" />
+        <el-form-item label="客戶">
+          <el-input v-model="form.customerName" :disabled="isDisabled" />
+          <el-button @click="handleCustomerList">選擇客戶</el-button>
+        </el-form-item>
+        <el-form-item label="付款狀態">
+          <el-select v-model="form.orderStatus">
+            <el-option
+              v-for="item in orderStatusOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="備註">
-          <el-input v-model="form.note" :disabled="isDisabled" />
+          <el-input
+            v-model="form.note"
+            :disabled="isDisabled"
+            type="textarea"
+            :row="5"
+          />
         </el-form-item>
       </el-form>
     </template>
@@ -40,6 +56,10 @@
       </div>
     </template>
   </el-drawer>
+  <OrderListCustomers
+    v-model="isCustomersVisible"
+    @selected-pigeon="handleSelectedCustomer"
+  ></OrderListCustomers>
 </template>
 <script lang="ts">
 import { defineComponent, computed, Ref, PropType, reactive, ref } from 'vue'
@@ -49,9 +69,11 @@ import {
   postCreateOrderApi,
   postUpdateOrderApi
 } from '@/utils/api/order'
-import { IOrderItem } from '@/types/api/order'
+import { IOrderItem, orderStatusOptions } from '@/types/api/order'
 import { ElNotification } from 'element-plus'
-
+import OrderListCustomers from '@/components/project/order/list/Customers.vue'
+import useDialog from '@/composables/useDialog'
+import { ICustomerItem } from '@/types/api/account'
 export default defineComponent({
   name: 'PigeonPlayerEdit',
   props: {
@@ -69,8 +91,13 @@ export default defineComponent({
     }
   },
   emits: ['close', 'success'],
-  components: {},
+  components: { OrderListCustomers },
   setup(props, { emit }) {
+    const {
+      isVisible: isCustomersVisible,
+      openDialog: openCustomersDialog,
+      closeDialog: closeCustomersDialog
+    } = useDialog()
     const emptyForm = reactive<IOrderItem>({
       id: null,
       custOrderNo: null,
@@ -108,8 +135,9 @@ export default defineComponent({
     })
     const getPlayer = async () => {
       if (isNumber(props.id)) {
-        // const data = await getUserApi(props.customerId)
-        // Object.assign(form, data)
+        const { data } = await getOrderItemApi(props.id)
+        console.log('data :>> ', data)
+        Object.assign(form, data.order)
       }
     }
     const getEmptyPlayer = () => {
@@ -127,33 +155,22 @@ export default defineComponent({
         updatedAndCreatedSuccess()
         closeDrawer()
       } catch (error) {
-        // ElNotification({
-        //   title: 'Error',
-        //   message: 'Create Failed',
-        //   type: 'error',
-        //   customClass: 'error-notification'
-        // })
         console.log('error :>> ', error)
       }
     }
     const handleEdit = async () => {
       if (isNumber(props.id)) {
         try {
-          // await putUserApi(props.customerId, form)
+          await postUpdateOrderApi(form)
           ElNotification({
             title: 'Success',
             message: 'Edit Success',
             type: 'success',
             customClass: 'success-notification'
           })
+          updatedAndCreatedSuccess()
           closeDrawer()
         } catch (error) {
-          // ElNotification({
-          //   title: 'Error',
-          //   message: 'Edit Failed',
-          //   type: 'error',
-          //   customClass: 'error-notification'
-          // })
           console.log('error :>> ', error)
         }
       }
@@ -176,17 +193,31 @@ export default defineComponent({
       emit('success')
     }
 
+    const handleSelectedCustomer = (row: ICustomerItem) => {
+      form.customerId = row.id ?? null
+      form.customerName = row.name
+      closeCustomersDialog()
+    }
+
+    const handleCustomerList = () => {
+      openCustomersDialog()
+    }
+
     return {
       title,
       form,
       isVisible,
+      isCustomersVisible,
       handleCreate,
       handleEdit,
       handleCancel,
       handleClose,
       isNumber,
       handleConfirm,
-      zipCodeOption
+      zipCodeOption,
+      orderStatusOptions,
+      handleSelectedCustomer,
+      handleCustomerList
     }
   }
 })
