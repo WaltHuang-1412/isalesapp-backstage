@@ -88,6 +88,7 @@
     </div>
     <OrderListEdit
       :id="selectedOrderId"
+      :is-disabled="isDisabled"
       @success="handleSearch"
       @close="handleDefaultSelectedOrderId"
     />
@@ -172,6 +173,7 @@ export default defineComponent({
       pagination,
       isArray,
       isNumber,
+      isDisabled,
       selectedOrderId,
       handleSearch,
       handleCurrentChange,

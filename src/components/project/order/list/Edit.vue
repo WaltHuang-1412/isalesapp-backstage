@@ -1,3 +1,18 @@
+<style lang="scss">
+.order-list-edit {
+  .box {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    &__name {
+      width: 70%;
+    }
+    &__button {
+      width: 30%;
+    }
+  }
+}
+</style>
 <template>
   <el-drawer
     v-model="isVisible"
@@ -5,6 +20,7 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     @close="handleClose"
+    class="order-list-edit"
   >
     <template #header>
       <h4>{{ title }}</h4>
@@ -12,14 +28,20 @@
     <template #default>
       <el-form label-position="top">
         <el-form-item label="訂單編號">
-          <el-input v-model="form.custOrderNo" :disabled="isDisabled" />
+          <el-input v-model="form.custOrderNo" :disabled="true" />
         </el-form-item>
         <el-form-item label="客戶">
-          <el-input v-model="form.customerName" :disabled="isDisabled" />
-          <el-button @click="handleCustomerList">選擇客戶</el-button>
+          <div class="box">
+            <div class="box__name">
+              <el-input v-model="form.customerName" :disabled="true" />
+            </div>
+            <div class="box__button">
+              <el-button @click="handleCustomerList" :disabled="isDisabled">選擇客戶</el-button>
+            </div>
+          </div>
         </el-form-item>
         <el-form-item label="付款狀態">
-          <el-select v-model="form.orderStatus">
+          <el-select v-model="form.orderStatus" :disabled="isDisabled">
             <el-option
               v-for="item in orderStatusOptions"
               :key="item.value"

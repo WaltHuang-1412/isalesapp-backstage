@@ -27,12 +27,12 @@ export interface IGetOrderItemResponse {
 }
 
 export enum OrderStatus {
-  Unestablished = 0,
-  EstablishedUnpaid = 1,
-  EstablishedPaid = 2,
-  ReturnedUnrefunded = 3,
-  ReturnedRefunded = 4,
-  Discarded = 5
+  Unestablished = '0',
+  EstablishedUnpaid = '1',
+  EstablishedPaid = '2',
+  ReturnedUnrefunded = '3',
+  ReturnedRefunded = '4',
+  Discarded = '5'
 }
 export const orderStatusOptions = [
   { value: OrderStatus.Unestablished, label: '未成立' },
