@@ -30,28 +30,43 @@
 </style>
 <template>
   <div class="customer-list">
-    <div class="customer-list__title">客戶清單</div>
+    <div class="customer-list__title">#{{ route.params.order_id }}</div>
     <div class="customer-list__filter">
       <div class="customer-list__filter__item">
         <el-button type="primary" :icon="Plus" @click="handleCreate"
-          >新增客戶</el-button
+          >新增商品</el-button
         >
       </div>
-      <div class="customer-list__filter__item">
+      <!-- <div class="customer-list__filter__item">
         <el-input v-model="filter.savlue" :prefix-icon="Search"> </el-input>
       </div>
       <div class="customer-list__filter__item">
         <el-button @click="handleSearch">搜尋</el-button>
-      </div>
+      </div> -->
     </div>
     <div class="customer-list__content">
       <template v-if="isArray(tableData)">
         <el-table :data="tableData" stripe style="width: 100%; height: 100%">
-          <el-table-column prop="name" label="客戶姓名" />
-          <el-table-column prop="cellphoneNum" label="手機號碼" />
-          <el-table-column prop="telephoneNum" label="電話" />
-          <el-table-column prop="addressDetail" label="聯絡地址" />
-          <el-table-column prop="note" label="備註" />
+          <el-table-column prop="product" label="編號">
+            <template #default="{ row }">{{ row.product?.id }}</template>
+          </el-table-column>
+          <el-table-column prop="product" label="商品名稱">
+            <template #default="{ row }">{{
+              row.product?.productName
+            }}</template>
+          </el-table-column>
+          <el-table-column prop="itemCount" label="數量"> </el-table-column>
+          <el-table-column prop="product" label="售價">
+            <template #default="{ row }">{{ row.product?.basePrice }}</template>
+          </el-table-column>
+
+          <el-table-column prop="product" label="成本">
+            <template #default="{ row }">{{ row.product?.costPrice }}</template>
+          </el-table-column>
+          <el-table-column prop="product" label="備註">
+            <template #default="{ row }">{{ row.product?.note }}</template>
+          </el-table-column>
+
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
               <el-button
@@ -67,7 +82,7 @@
       </template>
     </div>
     <div class="customer-list__pagination">
-      <template v-if="isNumber(pagination.total)">
+      <!-- <template v-if="isNumber(pagination.total)">
         <el-pagination
           background
           layout="prev, pager, next"
@@ -76,9 +91,9 @@
           :total="pagination.total"
           @current-change="handleCurrentChange"
         />
-      </template>
+      </template> -->
     </div>
-    <member-edit
+    <ProductListEdit
       :customer-id="selectedCustomerId"
       @success="handleSearch"
       @close="handleDefaultSelectedCustomerId"
@@ -86,37 +101,32 @@
   </div>
 </template>
 <script lang="ts">
-import { cloneDeep, isArray, isNumber } from 'lodash'
+import { cloneDeep, isArray, isNumber, isString } from 'lodash'
 import { defineComponent, reactive, ref, Ref } from 'vue'
-import { IPostCustomerListRequest, ICustomerItem } from '@/types/api/account'
-import { getCustomerListApi } from '@/utils/api/account'
+import { IOrderDetail } from '@/types/api/order'
+import { getProductListByOrderIdApi } from '@/utils/api/order'
 import { IPagination } from '@/types/api/global'
 import { routeList } from '@/router'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from '@/store'
-import MemberEdit from '@/components/project/member/Edit.vue'
+import ProductListEdit from '@/components/project/order/product-list/Edit.vue'
 import { Plus, Search } from '@element-plus/icons-vue'
 export default defineComponent({
   name: 'MemberList',
   components: {
-    MemberEdit
+    ProductListEdit
   },
   setup() {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
     const isDisabled = ref(true)
     const selectedCustomerId: Ref<number | null | undefined> = ref(null)
-    const tableData: Ref<ICustomerItem[] | null> = ref(null)
-    const filter = reactive<IPostCustomerListRequest>({
-      // search: null,
-      // dealer_code: null,
-      // account_status: true,
-      // sorting: null,
-      // descending: true,
+    const tableData: Ref<IOrderDetail[] | null> = ref(null)
+    const filter = reactive<any>({
       stype: null,
       savlue: null,
       page: 1
-      // size: 15
     })
     const pagination = reactive<IPagination>({
       total: null
@@ -129,12 +139,14 @@ export default defineComponent({
       await getTableData()
     }
     const getTableData = async () => {
-      const {
-        data: { list },
-        dataPage: { total }
-      } = await getCustomerListApi(filter)
-      tableData.value = list
-      pagination.total = total
+      const { order_id } = route.params
+      if (isString(order_id) && order_id.length > 0) {
+        const {
+          data: { list }
+        } = await getProductListByOrderIdApi(parseInt(order_id))
+        tableData.value = list
+        // pagination.total = total
+      }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleDetail = ({ row }: { row: any }) => {
@@ -153,15 +165,13 @@ export default defineComponent({
       selectedCustomerId.value = null
     }
     const initialization = async () => {
-      // if (store.state.userProfile?.account_type === accountType.dealer) {
-      // filter.dealer_code = cloneDeep(store.state.userProfile?.user_code)
-      // }
       await handleSearch()
     }
     initialization()
     return {
       Plus,
       Search,
+      route,
       tableData,
       filter,
       pagination,

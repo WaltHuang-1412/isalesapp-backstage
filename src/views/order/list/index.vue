@@ -46,7 +46,12 @@
     </div>
     <div class="order-list__content">
       <template v-if="isArray(tableData)">
-        <el-table :data="tableData" stripe style="width: 100%; height: 100%">
+        <el-table
+          :data="tableData"
+          stripe
+          style="width: 100%; height: 100%"
+          @row-click="handleRowClick"
+        >
           <el-table-column prop="custOrderNo" label="訂單編號" />
           <el-table-column prop="createTime" label="建立時間" />
           <el-table-column prop="customerName" label="客戶" />
@@ -161,6 +166,13 @@ export default defineComponent({
     const handleDefaultSelectedOrderId = () => {
       selectedOrderId.value = null
     }
+
+    const handleRowClick = (row: any) => {
+      router.push({
+        name: routeList['order_product-list'],
+        params: { order_id: row.id }
+      })
+    }
     const initialization = async () => {
       await handleSearch()
     }
@@ -180,7 +192,8 @@ export default defineComponent({
       handleDetail,
       handleEdit,
       handleCreate,
-      handleDefaultSelectedOrderId
+      handleDefaultSelectedOrderId,
+      handleRowClick
     }
   }
 })

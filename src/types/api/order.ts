@@ -42,3 +42,32 @@ export const orderStatusOptions = [
   { value: OrderStatus.ReturnedRefunded, label: '退貨，已退款' },
   { value: OrderStatus.Discarded, label: '廢棄' }
 ]
+
+export interface IOrderDetailProduct {
+  id: number | null
+  productNo: string | null
+  productName: string | null
+  brandId: number | null
+  brandName: string | null
+  productKindId: number | null
+  productType: string | null
+  basePrice: number | null
+  costPrice: number | null
+  warrantyYear: string | null
+  note: string | null
+  kindName: string | null
+}
+
+export interface IOrderDetail {
+  id: number | null
+  custOrderId: number | null
+  productId: number | null
+  product: IOrderDetailProduct
+  itemCount: number | null
+  totalPrice: number | null
+}
+
+
+export interface IPostOrderDetailResponse {
+  list: IOrderDetail[]
+}
