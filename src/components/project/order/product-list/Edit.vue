@@ -27,30 +27,40 @@
     </template>
     <template #default>
       <el-form label-position="top">
-        <el-form-item label="訂單編號">
-          <el-input v-model="form.custOrderNo" :disabled="true" />
+        <el-form-item label="商品名稱">
+          <el-input v-model="form.productName" :disabled="isDisabled" />
         </el-form-item>
-        <el-form-item label="客戶">
-          <div class="box">
-            <div class="box__name">
-              <el-input v-model="form.customerName" :disabled="true" />
-            </div>
-            <div class="box__button">
-              <el-button @click="handleCustomerList" :disabled="isDisabled"
-                >選擇客戶</el-button
-              >
-            </div>
-          </div>
-        </el-form-item>
-        <el-form-item label="付款狀態">
-          <el-select v-model="form.orderStatus" :disabled="isDisabled">
+        <el-form-item label="品牌">
+          <el-select v-model="form.brandId" :disabled="isDisabled">
             <el-option
-              v-for="item in orderStatusOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in homeApplianceBrand"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="類別">
+          <el-select v-model="form.productType" :disabled="isDisabled">
+            <el-option
+              v-for="item in homeApplianceCategory"
+              :key="item.id"
+              :label="item.chineseName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="型號">
+          <el-input v-model="form.productKindId" :disabled="isDisabled" />
+        </el-form-item>
+        <el-form-item label="售價">
+          <el-input v-model="form.basePrice" :disabled="isDisabled" />
+        </el-form-item>
+        <el-form-item label="成本">
+          <el-input v-model="form.costPrice" :disabled="isDisabled" />
+        </el-form-item>
+        <el-form-item label="保固年限">
+          <el-input v-model="form.warrantyYear" :disabled="isDisabled" />
         </el-form-item>
         <el-form-item label="備註">
           <el-input
@@ -75,29 +85,24 @@
           >編輯</el-button
         >
         <el-button v-else-if="id === -1" type="primary" @click="handleCreate"
-          >新增訂單</el-button
+          >新增品項</el-button
         >
       </div>
     </template>
   </el-drawer>
-  <OrderListCustomers
-    v-model="isCustomersVisible"
-    @selected-pigeon="handleSelectedCustomer"
-  ></OrderListCustomers>
 </template>
 <script lang="ts">
 import { defineComponent, computed, Ref, PropType, reactive, ref } from 'vue'
 import { cloneDeep, isNumber } from 'lodash'
 import {
   getOrderItemApi,
-  postCreateOrderApi,
-  postUpdateOrderApi
+  postCreateOrderDetailApi,
+  updateCreateOrderDetailApi
 } from '@/utils/api/order'
-import { IOrderItem, orderStatusOptions } from '@/types/api/order'
+import { IOrderDetailProduct } from '@/types/api/order'
 import { ElNotification } from 'element-plus'
-import OrderListCustomers from '@/components/project/order/list/Customers.vue'
-import useDialog from '@/composables/useDialog'
-import { ICustomerItem } from '@/types/api/account'
+import homeApplianceBrand from '@/library/taiwan/home-appliance-brand'
+import homeApplianceCategory from '@/library/taiwan/home-appliance-category'
 export default defineComponent({
   name: 'PigeonPlayerEdit',
   props: {
@@ -115,26 +120,24 @@ export default defineComponent({
     }
   },
   emits: ['close', 'success'],
-  components: { OrderListCustomers },
+  components: {},
   setup(props, { emit }) {
-    const {
-      isVisible: isCustomersVisible,
-      openDialog: openCustomersDialog,
-      closeDialog: closeCustomersDialog
-    } = useDialog()
-    const emptyForm = reactive<IOrderItem>({
+    const emptyForm = reactive<IOrderDetailProduct>({
       id: null,
-      custOrderNo: null,
-      customerId: null,
-      customerName: null,
-      orderStatus: null,
+      productNo: null,
+      productName: null,
+      brandId: null,
+      brandName: null,
+      productKindId: null,
+      productType: null,
+      basePrice: null,
+      costPrice: null,
+      warrantyYear: null,
       note: null,
-      totalPrice: null,
-      updateTime: null,
-      createTime: null
+      kindName: null
     })
 
-    const form: IOrderItem = reactive(cloneDeep(emptyForm))
+    const form: IOrderDetailProduct = reactive(cloneDeep(emptyForm))
     const zipCodeOption: Ref<unknown[]> = ref([])
 
     const isVisible: Ref<boolean> = computed(() => {
@@ -151,11 +154,11 @@ export default defineComponent({
     })
     const title = computed(() => {
       if (props.isDisabled) {
-        return '訂單'
+        return '品項'
       } else if (props.id && props.id > 0) {
-        return '編輯訂單'
+        return '編輯品項'
       }
-      return '新增訂單'
+      return '新增品項'
     })
     const getPlayer = async () => {
       if (isNumber(props.id)) {
@@ -169,7 +172,7 @@ export default defineComponent({
     }
     const handleCreate = async () => {
       try {
-        await postCreateOrderApi(form)
+        await postCreateOrderDetailApi(form)
         ElNotification({
           title: 'Success',
           message: 'Create Success',
@@ -185,7 +188,7 @@ export default defineComponent({
     const handleEdit = async () => {
       if (isNumber(props.id)) {
         try {
-          await postUpdateOrderApi(form)
+          await updateCreateOrderDetailApi(form)
           ElNotification({
             title: 'Success',
             message: 'Edit Success',
@@ -217,21 +220,10 @@ export default defineComponent({
       emit('success')
     }
 
-    const handleSelectedCustomer = (row: ICustomerItem) => {
-      form.customerId = row.id ?? null
-      form.customerName = row.name
-      closeCustomersDialog()
-    }
-
-    const handleCustomerList = () => {
-      openCustomersDialog()
-    }
-
     return {
       title,
       form,
       isVisible,
-      isCustomersVisible,
       handleCreate,
       handleEdit,
       handleCancel,
@@ -239,9 +231,8 @@ export default defineComponent({
       isNumber,
       handleConfirm,
       zipCodeOption,
-      orderStatusOptions,
-      handleSelectedCustomer,
-      handleCustomerList
+      homeApplianceBrand,
+      homeApplianceCategory
     }
   }
 })

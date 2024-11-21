@@ -44,7 +44,7 @@ export const orderStatusOptions = [
 ]
 
 export interface IOrderDetailProduct {
-  id: number | null
+  id?: number | null
   productNo: string | null
   productName: string | null
   brandId: number | null

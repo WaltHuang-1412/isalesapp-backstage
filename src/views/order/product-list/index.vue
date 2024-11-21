@@ -34,7 +34,7 @@
     <div class="customer-list__filter">
       <div class="customer-list__filter__item">
         <el-button type="primary" :icon="Plus" @click="handleCreate"
-          >新增商品</el-button
+          >新增品項</el-button
         >
       </div>
       <!-- <div class="customer-list__filter__item">
@@ -94,7 +94,7 @@
       </template> -->
     </div>
     <ProductListEdit
-      :customer-id="selectedCustomerId"
+      :id="selectedCustomerId"
       @success="handleSearch"
       @close="handleDefaultSelectedCustomerId"
     />
