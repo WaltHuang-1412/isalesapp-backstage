@@ -6,7 +6,7 @@ import {
   IGetOrderItemResponse,
   IOrderItem,
   IPostOrderDetailResponse,
-  IOrderDetailProduct
+  IOrderDetail
 } from '@/types/api/order'
 
 export function getOrderListApi(
@@ -35,10 +35,10 @@ export function getProductListByOrderIdApi(
   return axios.get(`orderItem/list/${id}`)
 }
 
-export function postCreateOrderDetailApi(request: IOrderDetailProduct) {
+export function postCreateOrderDetailApi(request: IOrderDetail) {
   return axios.post('orderItem/new', request)
 }
 
-export function updateCreateOrderDetailApi(request: IOrderDetailProduct) {
+export function updateCreateOrderDetailApi(request: IOrderDetail) {
   return axios.post('orderItem/update', request)
 }

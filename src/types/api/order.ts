@@ -59,10 +59,10 @@ export interface IOrderDetailProduct {
 }
 
 export interface IOrderDetail {
-  id: number | null
+  id?: number | null
   custOrderId: number | null
   productId: number | null
-  product: IOrderDetailProduct
+  product?: IOrderDetailProduct
   itemCount: number | null
   totalPrice: number | null
 }

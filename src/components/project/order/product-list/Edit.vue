@@ -28,10 +28,10 @@
     <template #default>
       <el-form label-position="top">
         <el-form-item label="商品名稱">
-          <el-input v-model="form.productName" :disabled="isDisabled" />
+          <el-input v-model="productForm.productName" :disabled="isDisabled" />
         </el-form-item>
         <el-form-item label="品牌">
-          <el-select v-model="form.brandId" :disabled="isDisabled">
+          <el-select v-model="productForm.brandId" :disabled="isDisabled">
             <el-option
               v-for="item in homeApplianceBrand"
               :key="item.id"
@@ -41,7 +41,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="類別">
-          <el-select v-model="form.productType" :disabled="isDisabled">
+          <el-select v-model="productForm.productKindId" :disabled="isDisabled">
             <el-option
               v-for="item in homeApplianceCategory"
               :key="item.id"
@@ -51,20 +51,29 @@
           </el-select>
         </el-form-item>
         <el-form-item label="型號">
-          <el-input v-model="form.productKindId" :disabled="isDisabled" />
+          <el-input v-model="productForm.productType" :disabled="isDisabled" />
         </el-form-item>
         <el-form-item label="售價">
-          <el-input v-model="form.basePrice" :disabled="isDisabled" />
+          <el-input
+            v-model.number="productForm.basePrice"
+            :disabled="isDisabled"
+          />
         </el-form-item>
         <el-form-item label="成本">
-          <el-input v-model="form.costPrice" :disabled="isDisabled" />
+          <el-input
+            v-model.number="productForm.costPrice"
+            :disabled="isDisabled"
+          />
         </el-form-item>
         <el-form-item label="保固年限">
-          <el-input v-model="form.warrantyYear" :disabled="isDisabled" />
+          <el-input
+            v-model.number="productForm.warrantyYear"
+            :disabled="isDisabled"
+          />
         </el-form-item>
         <el-form-item label="備註">
           <el-input
-            v-model="form.note"
+            v-model="productForm.note"
             :disabled="isDisabled"
             type="textarea"
             :row="5"
@@ -99,7 +108,9 @@ import {
   postCreateOrderDetailApi,
   updateCreateOrderDetailApi
 } from '@/utils/api/order'
-import { IOrderDetailProduct } from '@/types/api/order'
+import { createProductItemApi } from '@/utils/api/product'
+import { ICreateProductItemRequest } from '@/utils/api/product/type'
+import { IOrderDetail } from '@/types/api/order'
 import { ElNotification } from 'element-plus'
 import homeApplianceBrand from '@/library/taiwan/home-appliance-brand'
 import homeApplianceCategory from '@/library/taiwan/home-appliance-category'
@@ -122,23 +133,29 @@ export default defineComponent({
   emits: ['close', 'success'],
   components: {},
   setup(props, { emit }) {
-    const emptyForm = reactive<IOrderDetailProduct>({
+    const emptyForm = reactive<IOrderDetail>({
       id: null,
-      productNo: null,
+      custOrderId: null,
+      productId: null,
+      itemCount: null,
+      totalPrice: null
+    })
+
+    const form: IOrderDetail = reactive(cloneDeep(emptyForm))
+
+    const emptyProductForm = reactive<ICreateProductItemRequest>({
       productName: null,
       brandId: null,
-      brandName: null,
       productKindId: null,
       productType: null,
       basePrice: null,
       costPrice: null,
       warrantyYear: null,
-      note: null,
-      kindName: null
+      note: null
     })
-
-    const form: IOrderDetailProduct = reactive(cloneDeep(emptyForm))
-    const zipCodeOption: Ref<unknown[]> = ref([])
+    const productForm: ICreateProductItemRequest = reactive(
+      cloneDeep(emptyProductForm)
+    )
 
     const isVisible: Ref<boolean> = computed(() => {
       if (isNumber(props.id)) {
@@ -172,6 +189,10 @@ export default defineComponent({
     }
     const handleCreate = async () => {
       try {
+        const {
+          data: { id }
+        } = await createProductItemApi(productForm)
+        form.productId = id
         await postCreateOrderDetailApi(form)
         ElNotification({
           title: 'Success',
@@ -180,7 +201,7 @@ export default defineComponent({
           customClass: 'success-notification'
         })
         updatedAndCreatedSuccess()
-        closeDrawer()
+        // closeDrawer()
       } catch (error) {
         console.log('error :>> ', error)
       }
@@ -223,6 +244,7 @@ export default defineComponent({
     return {
       title,
       form,
+      productForm,
       isVisible,
       handleCreate,
       handleEdit,
@@ -230,7 +252,6 @@ export default defineComponent({
       handleClose,
       isNumber,
       handleConfirm,
-      zipCodeOption,
       homeApplianceBrand,
       homeApplianceCategory
     }

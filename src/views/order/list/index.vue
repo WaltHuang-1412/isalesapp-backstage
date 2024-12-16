@@ -64,14 +64,14 @@
                 link
                 type="primary"
                 size="small"
-                @click="handleDetail(scope)"
+                @click.stop="handleDetail(scope)"
                 >詳細資訊</el-button
               >
               <el-button
                 link
                 type="primary"
                 size="small"
-                @click="handleEdit(scope)"
+                @click.stop="handleEdit(scope)"
                 >編輯</el-button
               >
             </template>
