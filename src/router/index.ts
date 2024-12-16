@@ -9,9 +9,8 @@ export const routeList = {
   customer_list: 'customer_list',
   customer_detail: 'customer_detail',
   customer_detail_information: 'customer_detail_information',
-  'customer_detail_deposit-and-withdrawal':
-    'customer_detail_deposit-and-withdrawal',
-  customer_detail_transaction: 'customer_detail_transaction',
+  'customer_detail_order-list': 'customer_detail_order-list',
+  'customer_detail_maintenance-list': 'customer_detail_maintenance-list',
   order: 'order',
   order_list: 'order_list',
   'order_product-list': 'order_product-list'
@@ -70,21 +69,19 @@ const routes: Array<RouteRecordRaw> = [
             path: 'information',
             name: routeList.customer_detail_information,
             component: () =>
-              import('../views/customer/detail/information/index.vue')
+              import('../views/customer/detail/0-information/index.vue')
           },
           {
-            path: 'deposit-and-withdrawal',
-            name: routeList['customer_detail_deposit-and-withdrawal'],
+            path: 'order-list',
+            name: routeList['customer_detail_order-list'],
             component: () =>
-              import(
-                '../views/customer/detail/deposit-and-withdrawal/index.vue'
-              )
+              import('../views/customer/detail/1-order-list/index.vue')
           },
           {
-            path: 'transaction',
-            name: routeList.customer_detail_transaction,
+            path: 'maintenance-list',
+            name: routeList['customer_detail_maintenance-list'],
             component: () =>
-              import('../views/customer/detail/transaction/index.vue')
+              import('../views/customer/detail/2-maintenance-list/index.vue')
           }
         ]
       }

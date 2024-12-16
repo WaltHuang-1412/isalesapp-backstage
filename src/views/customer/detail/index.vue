@@ -27,11 +27,11 @@
       ></el-tab-pane>
       <el-tab-pane
         label="訂單"
-        :name="routeList['member_detail_deposit-and-withdrawal']"
+        :name="routeList['customer_detail_order-list']"
       ></el-tab-pane>
       <el-tab-pane
         label="維修紀錄"
-        :name="routeList.customer_detail_transaction"
+        :name="routeList['customer_detail_maintenance-list']"
       ></el-tab-pane>
       <transition>
         <router-view></router-view>
